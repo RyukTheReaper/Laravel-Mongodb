@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use Illuminate\Http\Request;
 
+//This controller is just a test for the db
 class MovieController extends Controller
 {
     /**
