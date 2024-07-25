@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\ForceJsonRequestHeader;
+use App\Http\Middleware\Cors;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
-        $middleware->append(ForceJsonRequestHeader::class);
+      $middleware->append(ForceJsonRequestHeader::class);
+      $middleware->append(Cors::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

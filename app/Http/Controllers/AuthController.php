@@ -37,13 +37,14 @@ class AuthController extends Controller
         ]);
     
         try{
-    
             $tempDeviceName = 'Temp Device Name';
     
             $credentials = [
                 'samaccountname' => $fields['username'],
                 'password' => $fields['password'],
             ];
+
+            # var_dump($credentials); return;
     
             if (Auth::validate($credentials)) {
                 $user = Auth::getLastAttempted();
