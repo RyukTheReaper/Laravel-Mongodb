@@ -28,40 +28,47 @@ class FacultyController extends Controller
 {
     //Initialize 
 
+    private function initializeReport(string $email){
+        return $reportData = Faculty::create([
+            'email' => $email,
+            'academicYearID' => "",
+            'faculty' =>  "",
+            'units' =>  "",
+            'deadline' =>  "",
+            'missionStatement' =>  "",
+            'strategicGoals' =>  "",
+            'accomplishments'=>  "",
+            'researchPartnerships' =>  "",
+            'academicPrograms' =>  "",
+            'courses' =>  "",
+            'eliminatedPrograms' =>  "",
+            'retentionInitiatives' =>  "",
+            'studentInternships' =>  "",
+            'degreesConferred' =>  "",
+            'studentSuccess' =>  "",
+            'activities' =>  "",
+            'administrativeData' =>  "",
+            'financialBudget' =>  "",
+            'meetings'=>  "",
+            'otherComments' =>  "",
+        ]);
+    }
+
     public function initialize(Request $request){
 
         try{
 
             $data = $request->all(); //Adding this in the event things need to be validated later on  
 
-            $reportData = Faculty::create([
-                'academicYearID' => "",
-                'faculty' =>  "",
-                'units' =>  "",
-                'deadline' =>  "",
-                'missionStatement' =>  "",
-                'strategicGoals' =>  "",
-                'accomplishments'=>  "",
-                'researchPartnerships' =>  "",
-                'academicPrograms' =>  "",
-                'courses' =>  "",
-                'eliminatedPrograms' =>  "",
-                'retentionInitiatives' =>  "",
-                'studentInternships' =>  "",
-                'degreesConferred' =>  "",
-                'studentSuccess' =>  "",
-                'activities' =>  "",
-                'administrativeData' =>  "",
-                'financialBudget' =>  "",
-                'meetings'=>  "",
-                'otherComments' =>  "",
-            ]);
+            $user = $request->user();            
+
+            $reportData = $this->initializeReport($user->email);
 
             $response = [
                 'success' => true,
                 'message' => "Initialization Successfull",
                 'data' => [
-                'reportID' => $reportData->_id
+                    'reportID' => $reportData->_id
                 ],            
             ]; 
         }catch(\Exception $e){
@@ -272,6 +279,53 @@ class FacultyController extends Controller
     }
      // Return response with HTTP status code 201 (Created)
      return response($response, 200);
+
+    }
+
+    public function getReportByUser(Request $request){
+        try {
+
+            // $data = $request->all();
+            // $id = $request->input('reportID');
+
+            // Retrieve data based on conditions (assuming $request has the id parameter)
+
+            $user = $request->user();
+
+            $report = Faculty::where('email', $user->email)->first();
+
+            if ($report) {
+                    // Format success response
+                $response = [
+                    'success' => true,
+                    'message' => 'Report data found successfully',
+                    'data' => [
+                        'reportData' => $report 
+                    ]
+                ];
+            } else {
+                $report = $this->initializeReport($user->email);
+
+                // Report not found
+                $response = [
+                    'success' => true,
+                    'message' => 'Report Initialized.',
+                    'data' => [
+                        'reportData' => $report 
+                    ],
+                ];
+            }
+
+        } catch (\Exception $e) {
+                // Exception occurred
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => null
+            ];
+        }
+        // Return response with HTTP status code 201 (Created)
+        return response($response, 200);
 
     }
 
