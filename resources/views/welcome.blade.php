@@ -63,6 +63,9 @@
                             >
                                 <div id="screenshot-container" class="relative flex w-full flex-1 items-stretch">
                                     <h1>Hello Testing...</h1>
+
+                                    <a href="/generate-pdf">Download</a>
+
                                     <img
                                         src="https://laravel.com/assets/img/welcome/docs-light.svg"
                                         alt="Laravel documentation screenshot"

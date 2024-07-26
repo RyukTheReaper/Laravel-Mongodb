@@ -29,23 +29,30 @@ class RecordsStatistics extends Controller
 {
     //Initialize function
 
+    private function initializeReport(string $email){
+        return $reportData = Records::create([
+            'email' => $email,
+            'academicYearID' => "",
+            'department' => "",
+            'deadline' => "",
+            'currentStudentEnrollment' => "",
+            'studentEnrollmentTrend' => "",
+            'enrollmentTrendPerFaculty' => "",
+            'graduationStatistics'=> "",
+            'studentOrigin' => "",
+            'campusStatistics' => "",
+        ]);
+    }
+
     public function initialize(Request $request){
 
         try{
 
             $data = $request->all(); //Adding this in the event things need to be validated later on  
 
-            $reportData = Records::create([
-                'academicYearID' => "",
-                'department' => "",
-                'deadline' => "",
-                'currentStudentEnrollment' => "",
-                'studentEnrollmentTrend' => "",
-                'enrollmentTrendPerFaculty' => "",
-                'graduationStatistics'=> "",
-                'studentOrigin' => "",
-                'campusStatistics' => "",
-            ]);
+            $user = $request->user();            
+
+            $reportData = $this->initializeReport($user->email);
 
             $response = [
                 'success' => true,
@@ -241,5 +248,52 @@ class RecordsStatistics extends Controller
 
     }
 
+    public function getReportByUser(Request $request){
+        try {
+
+            // $data = $request->all();
+            // $id = $request->input('reportID');
+
+            // Retrieve data based on conditions (assuming $request has the id parameter)
+
+            $user = $request->user();
+
+            $report = Records::where('email', $user->email)->first();
+
+            if ($report) {
+                    // Format success response
+                $response = [
+                    'success' => true,
+                    'message' => 'Report data found successfully',
+                    'data' => [
+                        'reportData' => $report 
+                    ]
+                ];
+            } else {
+                $report = $this->initializeReport($user->email);
+
+                // Report not found
+                $response = [
+                    'success' => true,
+                    'message' => 'Report Initialized.',
+                    'data' => [
+                        'reportData' => $report 
+                    ],
+                ];
+            }
+
+        } catch (\Exception $e) {
+                // Exception occurred
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => null
+            ];
+        }
+        // Return response with HTTP status code 201 (Created)
+        return response($response, 200);
+
+    }
+    
 
 }

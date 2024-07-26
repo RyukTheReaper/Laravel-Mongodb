@@ -29,11 +29,27 @@ class FinanceStatistics extends Controller
 {
     //Initialize 
 
+    private function initializeReport(string $email){
+        return $reportData = Finance::create([
+            'email' => $email,
+            'academicYearID' => "",
+            'department' => "",
+            'deadline' => "",
+            'income' => "",
+            'expenditure' => "",
+            'investments' => ""
+        ]);
+    }
+
     public function initialize(Request $request){
 
         try{
 
             $data = $request->all(); //Adding this in the event things need to be validated later on  
+
+            $user = $request->user();            
+
+            $reportData = $this->initializeReport($user->email);
 
             $reportData = Finance::create([
                 'academicYearID' => "",
@@ -229,6 +245,53 @@ class FinanceStatistics extends Controller
     }
      // Return response with HTTP status code 201 (Created)
      return response($response, 200);
+
+    }
+
+    public function getReportByUser(Request $request){
+        try {
+
+            // $data = $request->all();
+            // $id = $request->input('reportID');
+
+            // Retrieve data based on conditions (assuming $request has the id parameter)
+
+            $user = $request->user();
+
+            $report = Finance::where('email', $user->email)->first();
+
+            if ($report) {
+                    // Format success response
+                $response = [
+                    'success' => true,
+                    'message' => 'Report data found successfully',
+                    'data' => [
+                        'reportData' => $report 
+                    ]
+                ];
+            } else {
+                $report = $this->initializeReport($user->email);
+
+                // Report not found
+                $response = [
+                    'success' => true,
+                    'message' => 'Report Initialized.',
+                    'data' => [
+                        'reportData' => $report 
+                    ],
+                ];
+            }
+
+        } catch (\Exception $e) {
+                // Exception occurred
+            $response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'data' => null
+            ];
+        }
+        // Return response with HTTP status code 201 (Created)
+        return response($response, 200);
 
     }
 

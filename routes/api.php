@@ -9,7 +9,7 @@ use App\Http\Controllers\HRStatistics;
 use App\Http\Controllers\FinanceStatistics;
 use App\Http\Controllers\FileUploadsController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\GeneratePdf;
 
 
 
@@ -46,14 +46,19 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     //Read 
 
     Route::get('/facultyReport/{reportID}', [FacultyController::class, 'getReport']); //This route should get the data that is passed in the UI 
+    Route::get('/facultyReportByUser', [FacultyController::class, 'getReportByUser']); //This route should get the data that is passed in the UI 
 
     Route::get('/staffReport/{reportID}', [StaffController::class, 'getReport']); //This route should get the data that is passed in the UI 
+    Route::get('/staffReportByUser', [StaffController::class, 'getReportByUser']); //This route should get the data that is passed in the UI 
 
     Route::get('/recordsReport/{reportID}', [RecordsStatistics::class, 'getReport']); //This route should get the data that is passed in the UI 
+    Route::get('/recordsReportByUser', [RecordsStatistics::class, 'getReportByUser']); //This route should get the data that is passed in the UI 
 
     Route::get('/HRReport/{reportID}', [HRStatistics::class, 'getReport']); //This route should get the data that is passed in the UI 
+    Route::get('/HRReportByUser', [HRStatistics::class, 'getReportByUser']); //This route should get the data that is passed in the UI H
 
     Route::get('/financeReport/{reportID}', [FinanceStatistics::class, 'getReport']); //This route should get the data that is passed in the UI 
+    Route::get('/financeReportByUser', [FinanceStatistics::class, 'getReportByUser']); //This route should get the data that is passed in the UI H
 
     //Update
 
@@ -92,14 +97,19 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get('/getFile/{fileType}/{fileName}', [FileUploadsController::class, 'downloadFile']);
 
+
+
 });
 
 
+    /*Generate pdf file*/
+    Route::get('/generate-pdf/{reportID}', [StaffController::class, 'generateStaffPdf']);
 
 
 
-
-
+    // Route::get('/testpdf', function () {
+    //     return view('pdfReport');
+    // });
 
 
 

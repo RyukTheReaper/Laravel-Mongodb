@@ -29,7 +29,8 @@ Author: SW
 
 class AuthController extends Controller
 {
-    //
+
+
     public function authenticateUser(Request $request){
         $fields = $request->validate([
             'username' => 'required',      
@@ -47,6 +48,9 @@ class AuthController extends Controller
     
             if (Auth::validate($credentials)) {
                 $user = Auth::getLastAttempted();
+
+                // Save Eamil
+                // $user->email = 
     
                 $token = $user->createToken($tempDeviceName)->plainTextToken;
     

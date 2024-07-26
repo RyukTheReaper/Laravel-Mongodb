@@ -22,6 +22,7 @@ class Faculty extends Model
     protected $collection = 'faculties'; // Specify the collection name if different from the default
 
     protected $fillable = [
+        'email',
         'userID',
         'academicYearID',
         'faculty',
