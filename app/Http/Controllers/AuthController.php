@@ -29,8 +29,6 @@ Author: SW
 
 class AuthController extends Controller
 {
-
-
     public function authenticateUser(Request $request){
         $fields = $request->validate([
             'username' => 'required',      
@@ -45,10 +43,9 @@ class AuthController extends Controller
                 'password' => $fields['password'],
             ];
 
-            # var_dump($credentials); return;
     
             if (Auth::validate($credentials)) {
-                $user = Auth::getLastAttempted();
+              $user = Auth::getLastAttempted();
 
                 // Save Eamil
                 // $user->email = 
@@ -59,7 +56,8 @@ class AuthController extends Controller
                     'success' => true,
                     'message' => "Authenticated Successfully.",
                     'data' => [                                
-                        'token' => $token,
+                      'token' => $token,
+                      'name' => $user->name
                     ]                    
                 ];
             }else{

@@ -60,17 +60,20 @@ class FacultyController extends Controller
 
             $data = $request->all(); //Adding this in the event things need to be validated later on  
 
-            $user = $request->user();            
+            $user = $request->user();
+
+            if(!$user || !$user->email)
+              return response (['success' => false, 'message' =>'User\'s email not found on AD.', 'data' => null], 400);
 
             $reportData = $this->initializeReport($user->email);
 
             $response = [
-                'success' => true,
-                'message' => "Initialization Successfull",
-                'data' => [
-                    'reportID' => $reportData->_id
-                ],            
-            ]; 
+              'success' => true,
+              'message' => "Initialization Successfull",
+              'data' => [
+                  'reportID' => $reportData->_id
+              ],            
+            ];
         }catch(\Exception $e){
             // If an error occurs, create an error response
             $response = [
@@ -291,6 +294,9 @@ class FacultyController extends Controller
             // Retrieve data based on conditions (assuming $request has the id parameter)
 
             $user = $request->user();
+
+            if(!$user || !$user->email)
+              return response (['success' => false, 'message' =>'User\'s email not found on AD.', 'data' => null], 400);
 
             $report = Faculty::where('email', $user->email)->first();
 
