@@ -31,25 +31,27 @@ class FacultyController extends Controller
     private function initializeReport(string $email){
         return $reportData = Faculty::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'faculty' =>  "",
             'units' =>  "",
             'deadline' =>  "",
+            'departmentList' => '',
             'missionStatement' =>  "",
-            'strategicGoals' =>  "",
-            'accomplishments'=>  "",
-            'researchPartnerships' =>  "",
+            'strategicGoals' =>  ['previousAcademicYear' => '', 'plans' => ''],
+            'accomplishments'=>  ['accomplishmentList' => '', 'accomplishmentAdvancement' => '', 'multipleChoice' => '', 'why' => '', 'applicableOpportunities' => ''],
+            'researchPartnerships' =>  ['externalFunding' => '', 'researchPublications' => '', 'partnershipAgencies' => '', 'scholarships' => ''],
+            'revisedAcademics' => ['programsOffered' => '', 'newProgrammesAdded' => '', 'revisedPrograms' => ''],
             'academicPrograms' =>  "",
-            'courses' =>  "",
-            'eliminatedPrograms' =>  "",
-            'retentionInitiatives' =>  "",
+            'courses' =>  ['totalNewCourses' => '', 'totalCoursesOnline' => '', 'totalCourseFaceToFace' => ''],
+            'eliminatedAcademicPrograms' =>  "",
+            'retentionOfStudents' =>  ['currentStudents' => '', 'transferStudents' => ''],
             'studentInternships' =>  "",
-            'degreesConferred' =>  "",
-            'studentSuccess' =>  "",
-            'activities' =>  "",
-            'administrativeData' =>  "",
-            'financialBudget' =>  "",
-            'meetings'=>  "",
+            'degreesConferred' =>  ['degreesConferredForMostRecentAcademicYear' => '', 'degreesConferredForMostRecentAcademicYearPerDepartment' => ''],
+            'studentSuccess' =>  ['studentLearning' => '', 'studentClubs' => '', 'student1' => '', 'reason1' => '', 'student2' => '', 'reason2' => '', 'student3' => '', 'reason3' => ''],
+            'activities' =>  [],
+            'administrativeData' =>  ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
+            'financialBudget' =>  ['fundingSources' => '', 'impactfulChanges' => ''],
+            'meetings'=>  Array(['meetingId' => '', 'meetingType' => '', 'meetingDate', 'meetingMinutesURL' => '']),
             'otherComments' =>  "",
         ]);
     }
@@ -100,14 +102,16 @@ class FacultyController extends Controller
                 'faculty' => $data['faculty'],
                 'units' => $data['units'],
                 'deadline' => $data['deadline'],
+                'departmentList' => $data['departmentList'],
                 'missionStatement' => $data['missionStatement'],
                 'strategicGoals' => $data['strategicGoals'],
                 'accomplishments'=> $data['accomplishments'],
                 'researchPartnerships' => $data['researchPartnerships'],
+                'revisedAcademics' => $data['revisedAcademics'],
                 'academicPrograms' => $data['academicPrograms'],
                 'courses' => $data['courses'],
-                'eliminatedPrograms' => $data['eliminatedPrograms'],
-                'retentionInitiatives' => $data['retentionInitiatives'],
+                'eliminatedAcademicPrograms' => $data['eliminatedAcademicPrograms'],
+                'retentionOfStudents' => $data['retentionOfStudents'],
                 'studentInternships' => $data['studentInternships'],
                 'degreesConferred' => $data['degreesConferred'],
                 'studentSuccess' => $data['studentSuccess'],
@@ -189,7 +193,7 @@ class FacultyController extends Controller
             // $id = $request->input('reportID');
 
             // Retrieve data based on conditions (assuming $request has the id parameter)
-            $report = Faculty::where('_id', $data['reportID'])->first();
+            $report = Faculty::where('_id', $data['_id'])->first();
 
             if ($report) {
 
@@ -197,14 +201,16 @@ class FacultyController extends Controller
                 $report->faculty = $request->has('faculty') ? $data['faculty'] : $report->faculty;
                 $report->units = $request->has('units') ? $data['units'] : $report->units;
                 $report->deadline = $request->has('deadline') ? $data['deadline'] : $report->deadline;
+                $report->departmentList = $request->has('departmentList') ? $data['departmentList'] : $report->departmentList;
                 $report->missionStatement = $request->has('missionStatement') ? $data['missionStatement'] : $report->missionStatement;
                 $report->strategicGoals = $request->has('strategicGoals') ? $data['strategicGoals'] : $report->strategicGoals;
                 $report->accomplishments = $request->has('accomplishments') ? $data['accomplishments'] : $report->accomplishments;
                 $report->researchPartnerships = $request->has('researchPartnerships') ? $data['researchPartnerships'] : $report->researchPartnerships;
+                $report->revisedAcademics = $request->has('revisedAcademics') ? $data['revisedAcademics'] : $report->revisedAcademics;
                 $report->academicPrograms = $request->has('academicPrograms') ? $data['academicPrograms'] : $report->academicPrograms;
                 $report->courses = $request->has('courses') ? $data['courses'] : $report->courses;
-                $report->eliminatedPrograms = $request->has('eliminatedPrograms') ? $data['eliminatedPrograms'] : $report->eliminatedPrograms;
-                $report->retentionInitiatives = $request->has('retentionInitiatives') ? $data['retentionInitiatives'] : $report->retentionInitiatives;
+                $report->eliminatedAcademicPrograms = $request->has('eliminatedAcademicPrograms') ? $data['eliminatedAcademicPrograms'] : $report->eliminatedAcademicPrograms;
+                $report->retentionOfStudents = $request->has('retentionOfStudents') ? $data['retentionOfStudents'] : $report->retentionOfStudents;
                 $report->studentInternships = $request->has('studentInternships') ? $data['studentInternships'] : $report->studentInternships;
                 $report->degreesConferred = $request->has('degreesConferred') ? $data['degreesConferred'] : $report->degreesConferred;
                 $report->studentSuccess = $request->has('studentSuccess') ? $data['studentSuccess'] : $report->studentSuccess;

@@ -166,7 +166,7 @@ class FinanceStatistics extends Controller
             // $id = $request->input('reportID');
 
             // Retrieve data based on conditions (assuming $request has the id parameter)
-            $report = Finance::where('_id', $data['reportID'])->first();
+            $report = Finance::where('_id', $data['_id'])->first();
 
             if ($report) {
 
