@@ -186,7 +186,7 @@ class FacultyController extends Controller
             // $id = $request->input('reportID');
 
             // Retrieve data based on conditions (assuming $request has the id parameter)
-            $report = Faculty::where('_id', $data['reportID'])->first();
+            $report = Faculty::where('_id', $data['_id'])->first();
 
             if ($report) {
 

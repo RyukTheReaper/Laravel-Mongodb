@@ -163,7 +163,7 @@ class RecordsStatistics extends Controller
             // $id = $request->input('reportID');
 
             // Retrieve data based on conditions (assuming $request has the id parameter)
-            $report = Records::where('_id', $data['reportID'])->first();
+            $report = Records::where('_id', $data['_id'])->first();
 
             if ($report) {
 
