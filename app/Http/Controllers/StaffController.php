@@ -30,19 +30,19 @@ class StaffController extends Controller
     private function initializeReport(string $email){
         return $reportData = Staff::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'reportsTo' => "",
             'deadline' => "",
             'missionStatement' => "",
-            'strategicGoals' => "",
-            'accomplishments'=> "",
-            'researchPartnerships' => "",
-            'studentSuccess' => "",
-            'activities' => "",
-            'administrativeData' => "",
-            'financialBudget' => "",
-            'meetings'=> "",
+            'strategicGoals' => ['strategicGoalsUnderReview' => '', 'implmentationPlans' => '', 'plansToAchieveNotCompletedGoals' => '', 'strategicGoals' => ''],
+            'accomplishments'=> ['accomplishmentList' => '', 'accomplishmentAdvancement' => '', 'impactfulChange' => '', 'why' => '', 'applicableOpportunities' => ''],
+            'researchPartnerships' => ['externalFunding' => '', 'researchPublications' => '', 'partnershipAgencies' => '', 'scholarships' => ''],
+            'studentSuccess' => ['studentLearning' => '', 'studentClubs' => '', 'student1' => '', 'reason1' => '', 'student2' => '', 'reason2' => '', 'student3' => '', 'reason3' => '' ],
+            'activities' => Array(['eventId' =>  0, 'eventName' => '', 'personsInPicture' => '', 'pictureURL' => Array(['eventPicture' => '']), 'eventSummary' => '', 'eventMonth' => '']),
+            'administrativeData' => ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
+            'financialBudget' => ['fundingSources' => '', 'significantBudgetChanges' => ''],
+            'meetings'=> Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate' => '', 'meetingMinutesURL' => '']),
             'otherComments' => "",
         ]);
     }

@@ -32,10 +32,14 @@ class HRStatistics extends Controller
     private function initializeReport(string $email){
         return $reportData = HumanResources::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'deadline' => "",
-            'numberOfStaff' => "",
+            'numberOfStaff' => [
+              'FulltimeFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
+              'AdjunctFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
+              'NonTeachingStaff' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => '']
+            ],
         ]);
     }
 

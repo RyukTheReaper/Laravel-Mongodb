@@ -32,12 +32,12 @@ class FinanceStatistics extends Controller
     private function initializeReport(string $email){
         return $reportData = Finance::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'deadline' => "",
-            'income' => "",
-            'expenditure' => "",
-            'investments' => ""
+            'income' => ['fundingFromGoB' => '', 'tuitionFees' => '', 'contracts' => '', 'researchGrants' => '', 'endowmentAndInvestmentIncome' => '', 'other' => '', 'total' => ''],
+            'expenditure' => ['teachingStaffCosts' => '', 'nonTeachingStaffCosts' => '', 'administrationCosts' => '', 'capitalExpenditures' => '', 'otherExpenditures' => ''],
+            'investments' => ['projectInvestment1' => '', 'projectInvestment2' => '', 'projectInvestment3' => '']
         ]);
     }
 

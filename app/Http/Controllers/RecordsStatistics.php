@@ -32,15 +32,48 @@ class RecordsStatistics extends Controller
     private function initializeReport(string $email){
         return $reportData = Records::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'deadline' => "",
-            'currentStudentEnrollment' => "",
-            'studentEnrollmentTrend' => "",
-            'enrollmentTrendPerFaculty' => "",
-            'graduationStatistics'=> "",
-            'studentOrigin' => "",
-            'campusStatistics' => "",
+            'currentStudentEnrollmentTrend' => ['associates' => '', 'undergraduate' => '', 'graduate' => ''],
+            'studentEnrollmentTrend' => Array(
+              ['academicYear' => '2021/2022', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => ''],
+              ['academicYear' => '2022/2023', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => ''],
+              ['academicYear' => '2023/2024', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => '']
+            ),
+            'enrollmentTrendPerFaculty' => Array(
+              ['academicYear' => '2021/2022', 'educationAndArts' => '', 'managementAndSocialScience' => '', 'healthScience' => '', 'scienceAndTechnology' => ''],
+              ['academicYear' => '2022/2023', 'educationAndArts' => '', 'managementAndSocialScience' => '', 'healthScience' => '', 'scienceAndTechnology' => ''],
+              ['academicYear' => '2023/2024', 'educationAndArts' => '', 'managementAndSocialScience' => '', 'healthScience' => '', 'scienceAndTechnology' => ''],
+            ),
+            'graduationStatistics'=> Array(
+              [
+              'academicYear' => "2021/2022",
+              'faculties' => Array(
+                [ 'degree' => 'Education and Arts', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Management and Social Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Health Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Science and Technology', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+              )],
+              [
+              'academicYear' => "2022/2023",
+              'faculties' => Array(
+                [ 'degree' => 'Education and Arts', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Management and Social Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Health Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Science and Technology', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+              )],
+              ['academicYear' => "2023/2024",
+              'faculties' => Array(
+                [ 'degree' => 'Education and Arts', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Management and Social Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Health Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Science and Technology', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+              )]
+            ),
+            'studentOrigin' => ['Belize' => '', 'CentralAmericanCountries' => '', 'OtherCountries' => ''],
+            'campusStatistics' => ['BelizeCity' => '', 'Belmopan' => '', 'PuntaGorda' => '', 'CentralFarm' => '', 'SatellitePrograms' => ''],
+            'graduates' => ['GraduatesByAge' => '', 'GraduatesByDistrict' => '']
         ]);
     }
 
@@ -86,12 +119,13 @@ class RecordsStatistics extends Controller
                 'academicYearID' => $data['academicYearID'],
                 'department' => $data['department'],
                 'deadline' => $data['deadline'],
-                'currentStudentEnrollment' => $data['currentStudentEnrollment'],
+                'currentStudentEnrollmentTrend' => $data['currentStudentEnrollmentTrend'],
                 'studentEnrollmentTrend' => $data['studentEnrollmentTrend'],
                 'enrollmentTrendPerFaculty' => $data['enrollmentTrendPerFaculty'],
                 'graduationStatistics'=> $data['graduationStatistics'],
                 'studentOrigin' => $data['studentOrigin'],
                 'campusStatistics' => $data['campusStatistics'],
+                'graduates' => $data['graduates'],
             ]);
 
             $response = [
@@ -163,7 +197,7 @@ class RecordsStatistics extends Controller
             // $id = $request->input('reportID');
 
             // Retrieve data based on conditions (assuming $request has the id parameter)
-            $report = Records::where('_id', $data['reportID'])->first();
+            $report = Records::where('email', $data['email'])->first();
 
             if ($report) {
 
@@ -176,6 +210,7 @@ class RecordsStatistics extends Controller
                 $report->graduationStatistics = $request->has('graduationStatistics') ? $data['graduationStatistics'] : $report->graduationStatistics;
                 $report->studentOrigin = $request->has('studentOrigin') ? $data['studentOrigin'] : $report->studentOrigin;
                 $report->campusStatistics = $request->has('campusStatistics') ? $data['campusStatistics'] : $report->campusStatistics;
+                $report->graduates = $request->has('graduates') ? $data['graduates'] : $report->graduates;
 
                 $report->save();
                     // Format success response

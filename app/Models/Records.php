@@ -23,16 +23,18 @@ class Records extends Model
     protected $collection = 'recordsStatistics'; // Specify the collection name if different from the default
 
     protected $fillable = [
+        'email',
         'userID',
         'academicYearID',
         'department',
         'reportsTo',
         'deadline',
-        'currentStudentEnrollment',
+        'currentStudentEnrollmentTrend',
         'studentEnrollmentTrend',
         'enrollmentTrendPerFaculty',
         'graduationStatistics',
         'studentOrigin',
         'campusStatistics',
+        'graduates'
     ];
 }
