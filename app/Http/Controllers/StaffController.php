@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Staff;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
@@ -30,19 +31,19 @@ class StaffController extends Controller
     private function initializeReport(string $email){
         return $reportData = Staff::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'reportsTo' => "",
             'deadline' => "",
             'missionStatement' => "",
-            'strategicGoals' => "",
-            'accomplishments'=> "",
-            'researchPartnerships' => "",
-            'studentSuccess' => "",
-            'activities' => "",
-            'administrativeData' => "",
-            'financialBudget' => "",
-            'meetings'=> "",
+            'strategicGoals' => ['strategicGoalsUnderReview' => '', 'implmentationPlans' => '', 'plansToAchieveNotCompletedGoals' => '', 'strategicGoals' => ''],
+            'accomplishments'=> ['accomplishmentList' => '', 'accomplishmentAdvancement' => '', 'impactfulChange' => '', 'why' => '', 'applicableOpportunities' => ''],
+            'researchPartnerships' => ['externalFunding' => '', 'researchPublications' => '', 'partnershipAgencies' => '', 'scholarships' => ''],
+            'studentSuccess' => ['studentLearning' => '', 'studentClubs' => '', 'student1' => '', 'reason1' => '', 'student2' => '', 'reason2' => '', 'student3' => '', 'reason3' => '' ],
+            'activities' => Array(['eventId' =>  0, 'eventName' => '', 'personsInPicture' => '', 'pictureURL' => Array(['eventPicture' => '']), 'eventSummary' => '', 'eventMonth' => '']),
+            'administrativeData' => ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
+            'financialBudget' => ['fundingSources' => '', 'significantBudgetChanges' => ''],
+            'meetings'=> Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate' => '', 'meetingMinutesURL' => '']),
             'otherComments' => "",
         ]);
     }
@@ -266,12 +267,31 @@ class StaffController extends Controller
             return response()->json(['error' => 'Report not found'], 404);
         }
 
+        // Get the user based on the email from the report
+        $user = User::where('email', $report->email)->first();        
+
         // Generate PDF using data directly
         // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
-        $pdf = PDF::loadView('staffReport', ['report' => $report]);
+        $pdf = PDF::loadView('staffReport', ['report' => $report, 'user' => $user]);
 
         // Return PDF as a response
         return $pdf->download('report_' . $report->id . '.pdf');
+    }
+
+    public function viewStaffReport(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Staff::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        $user = User::where('email', $report->email)->first();  
+
+        return view('staffReport', ['report' => $report, 'user' => $user]);
+        
     }
 
 
@@ -321,61 +341,6 @@ class StaffController extends Controller
         return response($response, 200);
 
     }
-
-    // public function submitReport(Request $request){ //data validation
-    //     try {
-
-    //         $data = $request->all();
-    //         // $id = $request->input('reportID');
-
-    //         // Retrieve data based on conditions (assuming $request has the id parameter)
-    //         $report = Staff::where('_id', $data['_id'])->first();
-
-    //         if ($report) {
-
-    //             $report->academicYearID = $request->has('academicYearID') ? $data['academicYearID'] : $report->academicYearID;
-    //             $report->department = $request->has('department') ? $data['department'] : $report->department;
-    //             $report->reportsTo = $request->has('reportsTo') ? $data['reportsTo'] : $report->reportsTo;
-    //             $report->deadline = $request->has('deadline') ? $data['deadline'] : $report->deadline;
-    //             $report->missionStatement = $request->has('missionStatement') ? $data['missionStatement'] : $report->missionStatement;
-    //             $report->strategicGoals = $request->has('strategicGoals') ? $data['strategicGoals'] : $report->strategicGoals;
-    //             $report->accomplishments = $request->has('accomplishments') ? $data['accomplishments'] : $report->accomplishments;
-    //             $report->researchPartnerships = $request->has('researchPartnerships') ? $data['researchPartnerships'] : $report->researchPartnerships;
-    //             $report->studentSuccess = $request->has('studentSuccess') ? $data['studentSuccess'] : $report->studentSuccess;
-    //             $report->activities = $request->has('activities') ? $data['activities'] : $report->activities;
-    //             $report->administrativeData = $request->has('administrativeData') ? $data['administrativeData'] : $report->administrativeData;
-    //             $report->financialBudget = $request->has('financialBudget') ? $data['financialBudget'] : $report->financialBudget;
-    //             $report->meetings = $request->has('meetings') ? $data['meetings'] : $report->meetings;
-    //             $report->otherComments = $request->has('otherComments') ? $data['otherComments'] : $report->otherComments;
-
-    //             $report->save();
-    //                 // Format success response
-    //             $response = [
-    //                 'success' => true,
-    //                 'message' => 'Report data updated successfully',
-    //                 'data' => null
-    //             ];
-    //         } else {
-    //             // Report not found
-    //             $response = [
-    //                 'success' => false,
-    //                 'message' => 'Report not found',
-    //                 'data' => null
-    //             ];
-    //         }
-
-    // } catch (\Exception $e) {
-    //         // Exception occurred
-    //     $response = [
-    //         'success' => false,
-    //         'message' => $e->getMessage(),
-    //         'data' => null
-    //     ];
-    // }
-    //  // Return response with HTTP status code 201 (Created)
-    //  return response($response, 200);
-
-    // }
 
 } 
 

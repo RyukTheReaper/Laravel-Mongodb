@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Finance;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 This is the Finance Statistics Controller responsible for doing 5 functions. 
@@ -32,12 +34,12 @@ class FinanceStatistics extends Controller
     private function initializeReport(string $email){
         return $reportData = Finance::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'deadline' => "",
-            'income' => "",
-            'expenditure' => "",
-            'investments' => ""
+            'income' => ['fundingFromGoB' => '', 'tuitionFees' => '', 'contracts' => '', 'researchGrants' => '', 'endowmentAndInvestmentIncome' => '', 'other' => '', 'total' => ''],
+            'expenditure' => ['teachingStaffCosts' => '', 'nonTeachingStaffCosts' => '', 'administrationCosts' => '', 'capitalExpenditures' => '', 'otherExpenditures' => ''],
+            'investments' => ['projectInvestment1' => '', 'projectInvestment2' => '', 'projectInvestment3' => '']
         ]);
     }
 
@@ -51,14 +53,7 @@ class FinanceStatistics extends Controller
 
             $reportData = $this->initializeReport($user->email);
 
-            $reportData = Finance::create([
-                'academicYearID' => "",
-                'department' => "",
-                'deadline' => "",
-                'income' => "",
-                'expenditure' => "",
-                'investments' => ""
-            ]);
+            //removed part of the original initialization function that was not needed
 
             $response = [
                 'success' => true,
@@ -294,5 +289,44 @@ class FinanceStatistics extends Controller
         return response($response, 200);
 
     }
+
+    public function generateFinancePdf(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Finance::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        // Get the user based on the email from the report
+        $user = User::where('email', $report->email)->first();        
+
+        // Generate PDF using data directly
+        // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
+        $pdf = PDF::loadView('FinanceStatisticsReport', ['report' => $report, 'user' => $user]);
+
+        // Return PDF as a response
+        return $pdf->download('report_' . $report->id . '.pdf');
+    }
+
+    public function viewFinanceReport(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Finance::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        $user = User::where('email', $report->email)->first();  
+
+        return view('FinanceStatisticsReport', ['report' => $report, 'user' => $user]);
+        
+    }
+
+
 
 }

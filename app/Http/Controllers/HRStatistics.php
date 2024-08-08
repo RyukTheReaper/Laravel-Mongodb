@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\HumanResources;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 This is the HR Statistics Controller responsible for doing 5 functions. 
@@ -32,17 +34,21 @@ class HRStatistics extends Controller
     private function initializeReport(string $email){
         return $reportData = HumanResources::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'department' => "",
             'deadline' => "",
-            'numberOfStaff' => "",
+            'numberOfStaff' => [ //From Github
+                'FulltimeFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
+                'AdjunctFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
+                'NonTeachingStaff' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => '']
+              ],
         ]);
     }
-
 
     public function initialize(Request $request){
 
         try{
+            // return "Testing initialize";
 
             $data = $request->all(); //Adding this in the event things need to be validated later on  
 
@@ -70,9 +76,9 @@ class HRStatistics extends Controller
 
     }
 
-    //Create
+    //Create function doesn't pass the user email
 
-    public function store(Request $request){
+    public function store(Request $request){ 
 
         $data = $request->all(); //Adding this in the event things need to be validated later on    
 
@@ -152,7 +158,7 @@ class HRStatistics extends Controller
 
             $data = $request->all();
             // $id = $request->input('reportID');
-
+            // return $data;
             // Retrieve data based on conditions (assuming $request has the id parameter)
             $report = HumanResources::where('_id', $data['_id'])->first();
 
@@ -280,5 +286,48 @@ class HRStatistics extends Controller
         return response($response, 200);
 
     }
+
+    // Original GenerateHRPdf function
+    public function generateHRPdf(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = HumanResources::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        // Get the user based on the email from the report
+        $user = User::where('email', $report->email)->first();        
+
+        // Generate PDF using data directly
+        // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
+        $pdf = PDF::loadView('HRStatisticsReport', ['report' => $report, 'user' => $user]);
+
+        // Return PDF as a response
+        return $pdf->download('report_' . $report->id . '.pdf');
+    }
+    
+
+    public function viewFacultyReport(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = HumanResources::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        $user = User::where('email', $report->email)->first();  
+
+        return view('HRStatisticsReport', ['report' => $report, 'user' => $user]);
+        
+    }
+
+    //Working on calculating the totals, will do this last
+
+    
 
 }

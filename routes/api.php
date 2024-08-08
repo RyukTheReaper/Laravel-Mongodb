@@ -29,7 +29,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/HRInitialize', [HRStatistics::class, 'initialize']); //This route should get the data that is passed in the UI 
 
-    Route::post('/financeInitialize', [StaffController::class, 'initialize']); //This route should get the data that is passed in the UI 
+    //Fixed this, was calling the wrong controller
+    Route::post('/financeInitialize', [FinanceStatistics::class, 'initialize']); //This route should get the data that is passed in the UI 
 
     //Create
 
@@ -86,8 +87,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     //Upload files
 
-    Route::post('/uploadPhoto', [FileUploadsController::class, 'uploadEventPhoto']); //This route should get the data that is passed in the UI 
 
+    Route::post('/uploadPhoto', [FileUploadsController::class, 'uploadEventPhoto']); //This route should get the data that is passed in the UI 
     Route::post('/uploadMeetings', [FileUploadsController::class, 'uploadMeetingMinutes']); //This route should get the data that is passed in the UI 
     
     /*Download files
@@ -102,8 +103,18 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 });
 
 
+
+
     /*Generate pdf file*/
-    Route::get('/generate-pdf/{reportID}', [StaffController::class, 'generateStaffPdf']);
+    Route::get('/generateStaffPdf/{reportID}', [StaffController::class, 'generateStaffPdf']);
+
+    Route::get('/generateFacultyPdf/{reportID}', [FacultyController::class, 'generateFacultyPdf']);
+
+    Route::get('/generateHRPdf/{reportID}', [HRStatistics::class, 'generateHRPdf']);
+
+    Route::get('/generateFinancePdf/{reportID}', [FinanceStatistics::class, 'generateFinancePdf']);
+
+    Route::get('/generateRecordsPdf/{reportID}', [RecordsStatistics::class, 'generateRecordsPdf']);
 
 
 
@@ -186,41 +197,40 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 // });
 
 
+// Route::post('ldaptest', function (Request $request) {
 
-Route::post('ldaptest', function (Request $request) {
+//     try {
+//         // Retrieve username from the request JSON data
+//         $username = $request->input('username');
 
-    try {
-        // Retrieve username from the request JSON data
-        $username = $request->input('username');
+//         // Build LDAP query to check if user exists
+//         $user = LdapUser::where('samaccountname', '=', $username)
+//                         ->select('samaccountname', 'memberof') // Specify attributes to retrieve
+//                         ->firstOrFail();
 
-        // Build LDAP query to check if user exists
-        $user = LdapUser::where('samaccountname', '=', $username)
-                        ->select('samaccountname', 'memberof') // Specify attributes to retrieve
-                        ->firstOrFail();
+//         // User found in AD
+//         $groups = $user->memberof; // Retrieve the memberof attribute (array of group DNs)
 
-        // User found in AD
-        $groups = $user->memberof; // Retrieve the memberof attribute (array of group DNs)
+//         // Parse group names from DNs (if needed)
+//         $groupNames = [];
+//         foreach ($groups as $group) {
+//             // Example: Extract CN from DN
+//             preg_match('/CN=([^,]+)/', $group, $matches);
+//             if (isset($matches[1])) {
+//                 $groupNames[] = $matches[1];
+//             }
+//         }
 
-        // Parse group names from DNs (if needed)
-        $groupNames = [];
-        foreach ($groups as $group) {
-            // Example: Extract CN from DN
-            preg_match('/CN=([^,]+)/', $group, $matches);
-            if (isset($matches[1])) {
-                $groupNames[] = $matches[1];
-            }
-        }
-
-        return response()->json([
-            'message' => 'User exists in Active Directory',
-            'username' => $user->samaccountname,
-            'memberof' => $groupNames, // Array of group names
-        ]);
-    } catch (ModelNotFoundException $e) {
-        // User not found in AD
-        return response()->json(['message' => 'User does not exist in Active Directory'], 404);
-    } catch (\Exception $e) {
-        // Handle other exceptions (e.g., LDAP connection issues)
-        return response()->json(['error' => 'Failed to check user in Active Directory'], 500);
-    }
-});
+//         return response()->json([
+//             'message' => 'User exists in Active Directory',
+//             'username' => $user->samaccountname,
+//             'memberof' => $groupNames, // Array of group names
+//         ]);
+//     } catch (ModelNotFoundException $e) {
+//         // User not found in AD
+//         return response()->json(['message' => 'User does not exist in Active Directory'], 404);
+//     } catch (\Exception $e) {
+//         // Handle other exceptions (e.g., LDAP connection issues)
+//         return response()->json(['error' => 'Failed to check user in Active Directory'], 500);
+//     }
+// });

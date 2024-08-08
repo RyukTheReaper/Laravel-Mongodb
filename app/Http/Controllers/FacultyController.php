@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Faculty;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 /*
 This is the Faculty Controller responsible for doing 5 functions. 
@@ -31,25 +34,27 @@ class FacultyController extends Controller
     private function initializeReport(string $email){
         return $reportData = Faculty::create([
             'email' => $email,
-            'academicYearID' => "",
+            'academicYearID' => "2023-2024",
             'faculty' =>  "",
             'units' =>  "",
             'deadline' =>  "",
+            'departmentList' => '',
             'missionStatement' =>  "",
-            'strategicGoals' =>  "",
-            'accomplishments'=>  "",
-            'researchPartnerships' =>  "",
+            'strategicGoals' =>  ['previousAcademicYear' => '', 'plans' => ''],
+            'accomplishments'=>  ['accomplishmentList' => '', 'accomplishmentAdvancement' => '', 'multipleChoice' => '', 'why' => '', 'applicableOpportunities' => ''],
+            'researchPartnerships' =>  ['externalFunding' => '', 'researchPublications' => '', 'partnershipAgencies' => '', 'scholarships' => ''],
+            'revisedAcademics' => ['programsOffered' => '', 'newProgrammesAdded' => '', 'revisedPrograms' => ''],
             'academicPrograms' =>  "",
-            'courses' =>  "",
-            'eliminatedPrograms' =>  "",
-            'retentionInitiatives' =>  "",
+            'courses' =>  ['totalNewCourses' => '', 'totalCoursesOnline' => '', 'totalCourseFaceToFace' => ''],
+            'eliminatedAcademicPrograms' =>  "",
+            'retentionOfStudents' =>  ['currentStudents' => '', 'transferStudents' => ''],
             'studentInternships' =>  "",
-            'degreesConferred' =>  "",
-            'studentSuccess' =>  "",
-            'activities' =>  "",
-            'administrativeData' =>  "",
-            'financialBudget' =>  "",
-            'meetings'=>  "",
+            'degreesConferred' =>  ['degreesConferredForMostRecentAcademicYear' => '', 'degreesConferredForMostRecentAcademicYearPerDepartment' => ''],
+            'studentSuccess' =>  ['studentLearning' => '', 'studentClubs' => '', 'student1' => '', 'reason1' => '', 'student2' => '', 'reason2' => '', 'student3' => '', 'reason3' => ''],
+            'activities' =>  Array(['eventId' => 0, 'eventName' => '', 'personsInPicture' => '', 'eventPicture' => Array(['url' => '', 'name' => '']), 'eventSummary' => '', 'eventMonth' => '']),
+            'administrativeData' =>  ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
+            'financialBudget' =>  ['fundingSources' => '', 'impactfulChanges' => ''],
+            'meetings'=>  Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate', 'meetingMinutesURL' => '']),
             'otherComments' =>  "",
         ]);
     }
@@ -194,14 +199,16 @@ class FacultyController extends Controller
                 $report->faculty = $request->has('faculty') ? $data['faculty'] : $report->faculty;
                 $report->units = $request->has('units') ? $data['units'] : $report->units;
                 $report->deadline = $request->has('deadline') ? $data['deadline'] : $report->deadline;
+                $report->departmentList = $request->has('departmentList') ? $data['departmentList'] : $report->departmentList;
                 $report->missionStatement = $request->has('missionStatement') ? $data['missionStatement'] : $report->missionStatement;
                 $report->strategicGoals = $request->has('strategicGoals') ? $data['strategicGoals'] : $report->strategicGoals;
                 $report->accomplishments = $request->has('accomplishments') ? $data['accomplishments'] : $report->accomplishments;
                 $report->researchPartnerships = $request->has('researchPartnerships') ? $data['researchPartnerships'] : $report->researchPartnerships;
+                $report->revisedAcademics = $request->has('revisedAcademics') ? $data['revisedAcademics'] : $report->revisedAcademics;
                 $report->academicPrograms = $request->has('academicPrograms') ? $data['academicPrograms'] : $report->academicPrograms;
                 $report->courses = $request->has('courses') ? $data['courses'] : $report->courses;
-                $report->eliminatedPrograms = $request->has('eliminatedPrograms') ? $data['eliminatedPrograms'] : $report->eliminatedPrograms;
-                $report->retentionInitiatives = $request->has('retentionInitiatives') ? $data['retentionInitiatives'] : $report->retentionInitiatives;
+                $report->eliminatedAcademicPrograms = $request->has('eliminatedAcademicPrograms') ? $data['eliminatedAcademicPrograms'] : $report->eliminatedAcademicPrograms;
+                $report->retentionOfStudents = $request->has('retentionOfStudents') ? $data['retentionOfStudents'] : $report->retentionOfStudents;
                 $report->studentInternships = $request->has('studentInternships') ? $data['studentInternships'] : $report->studentInternships;
                 $report->degreesConferred = $request->has('degreesConferred') ? $data['degreesConferred'] : $report->degreesConferred;
                 $report->studentSuccess = $request->has('studentSuccess') ? $data['studentSuccess'] : $report->studentSuccess;
@@ -329,4 +336,42 @@ class FacultyController extends Controller
 
     }
 
+    public function generateFacultyPdf(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Faculty::find($reportID);
+    
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        // Get the user based on the email from the report
+        $user = User::where('email', $report->email)->first();     
+
+        // Generate PDF using data directly
+        // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
+        $pdf = PDF::loadView('facultyReport', ['report' => $report, 'user' => $user]);
+
+
+        // Return PDF as a response
+        return $pdf->download('report_' . $report->id . '.pdf');
+    }
+
+    public function viewFacultyReport(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Faculty::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        $user = User::where('email', $report->email)->first();  
+
+        return view('facultyReport', ['report' => $report, 'user' => $user]);
+        
+    }
 }

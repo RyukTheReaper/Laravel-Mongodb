@@ -22,6 +22,7 @@ class Staff extends Model
     protected $collection = 'staff'; // Specify the collection name if different from the default
 
     protected $fillable = [
+        'email',
         'userID',
         'academicYearID',
         'department',

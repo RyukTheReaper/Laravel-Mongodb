@@ -80,8 +80,7 @@ class FileUploadsController extends Controller
                 'message' => 'File uploaded successfully',
                 'data' => [
                     'original_name' => $file->getClientOriginalName(),
-                    'generated_name' => $fileName,
-                    
+                    'generated_name' => $fileName,                    
                 ]
             ];              
 
