@@ -99,12 +99,6 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/getFile/{fileType}/{fileName}', [FileUploadsController::class, 'downloadFile']);
 
 
-
-});
-
-
-
-
     /*Generate pdf file*/
     Route::get('/generateStaffPdf/{reportID}', [StaffController::class, 'generateStaffPdf']);
 
@@ -115,6 +109,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/generateFinancePdf/{reportID}', [FinanceStatistics::class, 'generateFinancePdf']);
 
     Route::get('/generateRecordsPdf/{reportID}', [RecordsStatistics::class, 'generateRecordsPdf']);
+
+});
+
+
+
+
 
 
 
