@@ -24,6 +24,7 @@ class Finance extends Model
 
     protected $fillable = [
         'userID',
+        'email',
         'academicYearID',
         'department',
         'deadline',

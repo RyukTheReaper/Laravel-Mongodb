@@ -29,7 +29,6 @@ class FileUploadsController extends Controller
 
     public function uploadMeetingMinutes(Request $request){
         try{
-
             $file = $request->file('file');
             $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('uploads/meetings', $fileName);
@@ -68,7 +67,8 @@ class FileUploadsController extends Controller
 
     public function uploadEventPhoto(Request $request){
         try{
-
+            # return response($request, 200);
+            
             $file = $request->file('file');
             $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
             $file->storeAs('uploads/photos', $fileName);
