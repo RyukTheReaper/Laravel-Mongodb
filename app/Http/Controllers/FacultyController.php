@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Faculty;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 /*
 This is the Faculty Controller responsible for doing 5 functions. 
@@ -53,6 +56,7 @@ class FacultyController extends Controller
             'financialBudget' =>  ['fundingSources' => '', 'impactfulChanges' => ''],
             'meetings'=>  Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate', 'meetingMinutesURL' => '']),
             'otherComments' =>  "",
+            'formSubmitted' => false
         ]);
     }
 
@@ -120,6 +124,7 @@ class FacultyController extends Controller
                 'financialBudget' => $data['financialBudget'],
                 'meetings'=> $data['meetings'],
                 'otherComments' => $data['otherComments'],
+                'formSubmitted' => $data['formSubmitted']
             ]);
 
             $response = [
@@ -219,6 +224,7 @@ class FacultyController extends Controller
                 $report->financialBudget = $request->has('financialBudget') ? $data['financialBudget'] : $report->financialBudget;
                 $report->meetings = $request->has('meetings') ? $data['meetings'] : $report->meetings;
                 $report->otherComments = $request->has('otherComments') ? $data['otherComments'] : $report->otherComments;
+                $report->formSubmitted = $request->has('formSubmitted') ? $data['formSubmitted'] : $report->formSubmitted;
 
                 $report->save();
                     // Format success response
@@ -341,4 +347,42 @@ class FacultyController extends Controller
 
     }
 
+    public function generateFacultyPdf(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Faculty::find($reportID);
+    
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        // Get the user based on the email from the report
+        $user = User::where('email', $report->email)->first();     
+
+        // Generate PDF using data directly
+        // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
+        $pdf = PDF::loadView('facultyReport', ['report' => $report, 'user' => $user]);
+
+
+        // Return PDF as a response
+        return $pdf->download('report_' . $report->id . '.pdf');
+    }
+
+    public function viewFacultyReport(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Faculty::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        $user = User::where('email', $report->email)->first();  
+
+        return view('facultyReport', ['report' => $report, 'user' => $user]);
+        
+    }
 }

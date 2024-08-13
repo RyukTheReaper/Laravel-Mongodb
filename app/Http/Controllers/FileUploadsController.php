@@ -26,7 +26,6 @@ Author: SW
 class FileUploadsController extends Controller
 {
     //
-
     public function uploadMeetingMinutes(Request $request){
         try{
             $file = $request->file('file');
@@ -47,8 +46,7 @@ class FileUploadsController extends Controller
                 'message' => 'File uploaded successfully',
                 'data' => [
                     'original_name' => $file->getClientOriginalName(),
-                    'generated_name' => $fileName,
-                    
+                    'generated_name' => $fileName
                 ]
             ];              
 
@@ -66,23 +64,24 @@ class FileUploadsController extends Controller
     }
 
     public function uploadEventPhoto(Request $request){
-        try{
+        try {
             # return response($request, 200);
-            
-            $file = $request->file('file');
-            $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('uploads/photos', $fileName);
+            $result = Array();
+            if($files=$request->file('file')){
+              foreach($files as $file) {
+                $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/photos', $fileName);
+                array_push($result, ["generated_name" => $fileName, "original_name" => $file->getClientOriginalName()]);
+              }
+            } 
+            #$file = $request->file('file');
 
             //Implementing it this way returns information that might be usefull not sure what the full usecase for this would be
             //Saving to the report data
             $response = [
                 'success' => true,
-                'message' => 'File uploaded successfully',
-                'data' => [
-                    'original_name' => $file->getClientOriginalName(),
-                    'generated_name' => $fileName,
-                    
-                ]
+                'message' => 'File uploaded successfully'
+                'data' => $result
             ];              
 
         }catch(\Exception $e){
@@ -95,15 +94,12 @@ class FileUploadsController extends Controller
         }
 
         return response($response, 200);
-
     }
 
 
     public function downloadFile(Request $request, string $fileType, string $fileName){
-        
         try{
-
-            $filePath = storage_path('app/uploads/' . $fileType . '/' . $fileName);
+            $filePath = storage_path('app/uploads/'. $fileType . '/' . $fileName);
 
             if (file_exists($filePath)) {
                 return response()->download($filePath);
@@ -125,8 +121,6 @@ class FileUploadsController extends Controller
                     'data' => null
                 ];
             }
-
-    
         }catch(\Exception $e){
         // Exception occurred
             $response = [
@@ -137,8 +131,6 @@ class FileUploadsController extends Controller
         }
 
         return response($response, 200);
-
     }
-
 }
 

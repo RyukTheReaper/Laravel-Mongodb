@@ -37,6 +37,7 @@ class Staff extends Model
         'administrativeData',
         'financialBudget',
         'meetings',
-        'otherComments'
+        'otherComments',
+        'formSubmitted'
     ];
 }

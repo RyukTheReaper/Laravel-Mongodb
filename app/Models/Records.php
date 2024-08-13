@@ -22,6 +22,7 @@ class Records extends Model
     protected $connection = 'mongodb';
     protected $collection = 'recordsStatistics'; // Specify the collection name if different from the default
 
+    //updated from Github
     protected $fillable = [
         'email',
         'userID',
@@ -35,6 +36,7 @@ class Records extends Model
         'graduationStatistics',
         'studentOrigin',
         'campusStatistics',
-        'graduates'
+        'graduates',
+        'formSubmitted'
     ];
 }

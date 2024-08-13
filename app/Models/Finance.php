@@ -23,6 +23,7 @@ class Finance extends Model
     protected $collection = 'FinanceStatistics'; // Specify the collection name if different from the default
 
     protected $fillable = [
+        'email',
         'userID',
         'email',
         'academicYearID',
@@ -31,5 +32,6 @@ class Finance extends Model
         'income',
         'expenditure',
         'investments',
+        'formSubmitted'
     ];
 }

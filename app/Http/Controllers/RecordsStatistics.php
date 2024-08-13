@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Records;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 This is the Records Statistics Controller responsible for doing 5 functions. 
@@ -28,18 +30,18 @@ Author: SW
 class RecordsStatistics extends Controller
 {
     //Initialize function
-
+    //Updated from Github
     private function initializeReport(string $email){
         return $reportData = Records::create([
             'email' => $email,
-            'academicYearID' => "2023-2024",
+            'academicYearID' => "2023-2024", //temporary
             'department' => "",
             'deadline' => "",
-            'currentStudentEnrollmentTrend' => ['associates' => '', 'undergraduate' => '', 'graduate' => ''],
+            'currentStudentEnrollmentTrend' => ['associates' => '', 'undergraduate' => '', 'graduate' => '','Total' => ''], //Added Total to the array
             'studentEnrollmentTrend' => Array(
-              ['academicYear' => '2021/2022', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => ''],
-              ['academicYear' => '2022/2023', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => ''],
-              ['academicYear' => '2023/2024', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => '']
+              ['academicYear' => '2021/2022', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => '','Total' => ''], //Added Total to the array
+              ['academicYear' => '2022/2023', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => '','Total' => ''], //Added Total to the array
+              ['academicYear' => '2023/2024', 'associate' => '', 'undergraduate' => '', 'graduate' => '', 'other' => '','Total' => ''], //Added Total to the array
             ),
             'enrollmentTrendPerFaculty' => Array(
               ['academicYear' => '2021/2022', 'educationAndArts' => '', 'managementAndSocialScience' => '', 'healthScience' => '', 'scienceAndTechnology' => ''],
@@ -50,7 +52,7 @@ class RecordsStatistics extends Controller
               [
               'academicYear' => "2021/2022",
               'faculties' => Array(
-                [ 'degree' => 'Education and Arts', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
+                [ 'degree' => 'Education and Arts', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ], //A little ocd about this part but its okay
                 [ 'degree' => 'Management and Social Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
                 [ 'degree' => 'Health Science', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
                 [ 'degree' => 'Science and Technology', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
@@ -71,9 +73,7 @@ class RecordsStatistics extends Controller
                 [ 'degree' => 'Science and Technology', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
               )]
             ),
-            'studentOrigin' => ['Belize' => '', 'CentralAmericanCountries' => '', 'OtherCountries' => ''],
-            'campusStatistics' => ['BelizeCity' => '', 'Belmopan' => '', 'PuntaGorda' => '', 'CentralFarm' => '', 'SatellitePrograms' => ''],
-            'graduates' => ['GraduatesByAge' => '', 'GraduatesByDistrict' => '']
+          'formSubmitted' => false
         ]);
     }
 
@@ -123,9 +123,12 @@ class RecordsStatistics extends Controller
                 'studentEnrollmentTrend' => $data['studentEnrollmentTrend'],
                 'enrollmentTrendPerFaculty' => $data['enrollmentTrendPerFaculty'],
                 'graduationStatistics'=> $data['graduationStatistics'],
+                'graduatesByAge' => $data['graduatesByAge'], //New
+                'graduatesByDistricts' => $data['graduatesByDistricts'], //New
                 'studentOrigin' => $data['studentOrigin'],
                 'campusStatistics' => $data['campusStatistics'],
                 'graduates' => $data['graduates'],
+                'formSubmitted' => $data['formSubmitted']
             ]);
 
             $response = [
@@ -199,6 +202,7 @@ class RecordsStatistics extends Controller
             // Retrieve data based on conditions (assuming $request has the id parameter)
             $report = Records::where('email', $data['email'])->first();
 
+            //updated from git
             if ($report) {
 
                 $report->academicYearID = $request->has('academicYearID') ? $data['academicYearID'] : $report->academicYearID;
@@ -211,6 +215,7 @@ class RecordsStatistics extends Controller
                 $report->studentOrigin = $request->has('studentOrigin') ? $data['studentOrigin'] : $report->studentOrigin;
                 $report->campusStatistics = $request->has('campusStatistics') ? $data['campusStatistics'] : $report->campusStatistics;
                 $report->graduates = $request->has('graduates') ? $data['graduates'] : $report->graduates;
+                $report->formSubmitted = $request->has('formSubmitted') ? $data['formSubmitted'] : $report->formSubmitted;
 
                 $report->save();
                     // Format success response
@@ -328,6 +333,44 @@ class RecordsStatistics extends Controller
         // Return response with HTTP status code 201 (Created)
         return response($response, 200);
 
+    }
+
+    public function generateRecordsPdf(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Records::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        // Get the user based on the email from the report
+        $user = User::where('email', $report->email)->first();        
+
+        // Generate PDF using data directly
+        // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
+        $pdf = PDF::loadView('RecordsStatisticsReport', ['report' => $report, 'user' => $user])
+                    ->setPaper('a4', 'landscape'); // Set the paper size to A4 and orientation to landscape
+
+        // Return PDF as a response
+        return $pdf->download('report_' . $report->id . '.pdf');
+    }
+
+    public function viewFacultyReport(Request $request, string $reportID){ //Look into this a little more
+
+        // Fetch data from MongoDB based on report ID
+        $report = Records::find($reportID);
+
+        // return $report;
+        if (!$report) {
+            return response()->json(['error' => 'Report not found'], 404);
+        }
+
+        $user = User::where('email', $report->email)->first();  
+
+        return view('RecordsStatisticsReport', ['report' => $report, 'user' => $user]);
+        
     }
     
 

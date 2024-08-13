@@ -30,5 +30,6 @@ class HumanResources extends Model
         'reportsTo',
         'deadline',
         'numberOfStaff',
+        'formSubmitted'
     ];
 }

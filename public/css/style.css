@@ -1,0 +1,117 @@
+/* Basic Reset */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+/* Background for PDF */
+body {
+    color: #333333;
+    font-family: Arial, sans-serif;
+    margin: 40px;
+}
+
+/* Page Container */
+.container {
+    width: 100%;               
+}
+
+/* New header Styling */
+.header {
+    padding: 15px; /* Increased padding to ensure enough space */
+    background-color: #3d004a; /* Purple background for the header */
+    color: #ffffff; /* Gold text color */
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden; /* Clear floats */
+    min-height: 60px; /* Ensures the header has enough height */
+    align-items: center; /* Center items vertically */
+}
+
+.header-logo {
+    float: left;
+
+}
+
+.header-logo img {
+    max-width: 100px; /* Adjust logo size */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.header-text {
+    text-align: center; /* Position text beside the image*/
+}
+
+.header-text h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.header-text p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.academic-year {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Content Styles */
+.content {
+    padding: 10px;
+    background-color: #ffffff; /* White background for the content */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.content h2 {
+    color: #7e317b;
+    font-size: 24px;
+    border-bottom: 2px solid #7e317b;
+    padding-bottom: 10px;
+    margin-top: 0;
+    background-color: gold; /* Gold background color */
+}
+
+.content p {
+    margin: 10px 0;
+}
+
+.content p strong {
+    color: #333333;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+/* Footer Styles */
+.footer {
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    color: #666;
+}
+
+/* Print-Specific Styles */
+@media print {
+    .container {
+        background-color: #ffffff; /* White background for the content area */
+        box-shadow: none; /* Remove shadow for print */
+        padding: 10mm; /* Adjust padding for print if needed */
+        margin: 0; /* Remove margin for print */
+        border-radius: 0; /* Remove border radius for print */
+    }
+}
+
+/* Dompdf Specific Page Setup */
+@page {
+    size: A4;
+    margin: 20mm; /* Adjust margins as needed */
+}
