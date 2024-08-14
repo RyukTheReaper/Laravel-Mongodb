@@ -80,7 +80,7 @@ class FileUploadsController extends Controller
             //Saving to the report data
             $response = [
                 'success' => true,
-                'message' => 'File uploaded successfully'
+                'message' => 'File uploaded successfully',
                 'data' => $result
             ];              
 
