@@ -54,7 +54,7 @@ class FacultyController extends Controller
             'activities' => Array(['eventId' =>  0, 'eventName' => '', 'personsInPicture' => '', 'pictureURL' => Array(['eventPicture' => '']), 'eventSummary' => '', 'eventMonth' => '']),
             'administrativeData' =>  ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
             'financialBudget' =>  ['fundingSources' => '', 'impactfulChanges' => ''],
-            'meetings'=>  Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate', 'meetingMinutesURL' => '']),
+            'meetings'=> Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate' => '', 'meetingMinutesURL' => Array(['meetingURL' => ''])]),
             'otherComments' =>  "",
         ]);
     }
