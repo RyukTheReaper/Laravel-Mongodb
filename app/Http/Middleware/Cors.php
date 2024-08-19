@@ -15,8 +15,9 @@ class Cors
      */
     public function handle(Request $request, Closure $next): Response
     {
-      $allowedOrigins = ['forms.ub.edu.bz'];
-      $origin = $_SERVER['HTTP_ORIGIN'];
+      $allowedOrigins = ['https://forms.ub.edu.bz', 'http://127.0.0.1:5173', 'https://api.ub.edu.bz'];
+      # $origin = $_SERVER['HTTP_ORIGIN'];
+      $origin = request()->headers->get('referer');
       
       $response = $next($request);
       if (in_array($origin, $allowedOrigins)) {
