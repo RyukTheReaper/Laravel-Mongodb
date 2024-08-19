@@ -5,139 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Annual Report PDF</title>
-   
-    <style>
-        /* Basic Reset */
-        html, body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Background for PDF */
-        body {
-            color: #333333;
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-
-        /* Page Container */
-        .container {
-            width: 100%;
-        }
-
-        /* Header Styling */
-        .header {
-            padding: 15px;
-            background-color: #3d004a;
-            color: #ffffff;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .header-content {
-            display: inline-block;
-            text-align: left;
-            vertical-align: middle;
-        }
-
-        .header-logo {
-            display: inline-block;
-            margin-right: 15px;
-            vertical-align: middle;
-        }
-
-        .header-logo img {
-            max-width: 100px;
-            height: auto;
-            margin-top: 10px;
-        }
-
-        .header-text {
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .header-text h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .header-text p {
-            margin: 0;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        .academic-year {
-            font-size: 16px;
-            font-weight: bold;
-            display: block;
-            margin-top: 5px;
-        }
-
-        /* Content Styles */
-        .content {
-            padding: 10px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .content h2 {
-            color: #000000;
-            font-size: 24px;
-            border-bottom: 2px solid #7e317b;
-            padding-bottom: 10px;
-            margin-top: 0;
-            background-color: gold;
-        }
-
-        .content p {
-            margin: 10px 0;
-        }
-
-        .content p strong {
-            color: #333333;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 15px;
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
-            color: #666;
-        }
-
-        @media print {
-            .container {
-                background-color: #ffffff;
-                box-shadow: none;
-                padding: 10mm;
-                margin: 0;
-                border-radius: 0;
-            }
-        }
-
-        @page {
-            size: A4;
-            margin: 20mm;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ public_path('/css/facultyStyle.css') }}">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="header-content">
                 <div class="header-logo">
-                    <img src="https://raw.githubusercontent.com/RyukTheReaper/Images/main/UB-Logo2.png" alt="University Logo">
+                    <img src="{{public_path('/images/UB-Logo.png')}}" alt="University Logo">
                 </div>
                 <div class="header-text">
                     <h1>University of Belize Annual Report</h1>
@@ -321,6 +196,7 @@
             @endif
         </section>
 
+
         <section class="content">
             <h2>XII. Activities for the Year</h2>
             @foreach ($report->activities as $activity)
@@ -328,13 +204,27 @@
                 <p><strong>Persons in Picture:</strong> {{ $activity['personsInPicture'] }}</p>
                 <p><strong>Event Summary:</strong> {{ $activity['eventSummary'] }}</p>
                 <p><strong>Event Month:</strong> {{ $activity['eventMonth'] }}</p>
-                @foreach ($activity['eventPicture'] as $picture)
-                    <img src="{{ $picture['url'] }}" alt="{{ $picture['name'] }}" style="max-width: 100%; height: auto;">
-                    <p class="image-name">{{ $picture['name'] }}</p>
-                @endforeach
+
+                <!-- Use public_path for PDF generation -->
+                @if (isset($activity['pictureURL']) && is_array($activity['pictureURL']))
+                    @foreach ($activity['pictureURL'] as $pictureURL)
+                        @if (isset($pictureURL['eventPicture']) && !empty($pictureURL['eventPicture']))
+                            @php
+                                $baseUrl = request()->getSchemeAndHttpHost();
+                            @endphp
+                            <!-- Ensure to use public_path to generate the correct file path -->
+                            <img src="{{ public_path($pictureURL['eventPicture']) }}" alt="Event Picture" style="max-width: 100%; height: auto;">
+                            <p><a href="{{ $baseUrl . $pictureURL['eventPicture'] }}"><b>Download Image</b></a></p>
+                        @endif
+                    @endforeach
+                @else
+                    <p>No pictures available for this event.</p>
+                @endif
+                
                 <hr>
-            @endforeach
+        @endforeach
         </section>
+
 
         <section class="content">
             <h2>VII. Administrative Department Data</h2>
@@ -378,7 +268,7 @@
                         <p><b>Meeting Date:</b> {{ $meeting['meetingDate'] }}</p>
                     @endif
                     @if(isset($meeting['meetingMinutesURL']))
-                        <p><b>Meeting Minutes URL:</b> <a href="{{ $meeting['meetingMinutesURL'] }}">{{ $meeting['meetingMinutesURL'] }}</a></p>
+                        <p><b>Meeting Minutes URL:</b> <a href="{{ $meeting['meetingMinutesURL'] }}">View Minutes</a></p>
                     @endif
                     <hr>
                 @endforeach

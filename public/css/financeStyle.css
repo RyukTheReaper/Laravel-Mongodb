@@ -6,7 +6,7 @@ html, body {
 }
 
 /* Background for PDF */
-body {
+    body {
     color: #333333;
     font-family: Arial, sans-serif;
     margin: 40px;
@@ -14,33 +14,44 @@ body {
 
 /* Page Container */
 .container {
-    width: 100%;               
+    width: 100%;
 }
 
 /* New header Styling */
 .header {
     padding: 15px; /* Increased padding to ensure enough space */
     background-color: #3d004a; /* Purple background for the header */
-    color: #ffffff; /* Gold text color */
+    color: #ffffff; /* White text color */
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden; /* Clear floats */
-    min-height: 60px; /* Ensures the header has enough height */
-    align-items: center; /* Center items vertically */
+    text-align: center; /* Center content in the header */
 }
 
-.header-logo {
-    float: left;
+/* Centering the container for logo and text */
+.header-content {
+    display: inline-block; /* Ensure it only takes up as much space as needed */
+    text-align: left; /* Align items inside this container to the left */
+    vertical-align: middle; /* Align vertically with surrounding content */
+}
 
+/* Header Logo Styling */
+.header-logo {
+    display: inline-block; /* Keep logo inline with the text */
+    margin-right: 15px; /* Space between the logo and the text */
+    vertical-align: middle; /* Align vertically with the text */
 }
 
 .header-logo img {
     max-width: 100px; /* Adjust logo size */
     height: auto; /* Maintain aspect ratio */
+    margin-top: 10px; /* Adjust as needed to align with text */
 }
 
+/* Header Text Styling */
 .header-text {
-    text-align: center; /* Position text beside the image*/
+    display: inline-block; /* Ensure text is inline with the logo */
+    vertical-align: middle; /* Align vertically with the logo */
 }
 
 .header-text h1 {
@@ -51,13 +62,15 @@ body {
 .header-text p {
     margin: 0;
     font-size: 16px;
+    text-align: center; /* Center text for alignment */
 }
 
+/* Academic Year Styling */
 .academic-year {
-    text-align: center;
-    margin-top: 20px;
     font-size: 16px;
     font-weight: bold;
+    display: block; /* Ensure it takes full width for centering */
+    margin-top: 5px; /* Space between the h1 and the p */
 }
 
 /* Content Styles */
@@ -70,7 +83,7 @@ body {
 }
 
 .content h2 {
-    color: #7e317b;
+    color: #000000; /* Changed to black */
     font-size: 24px;
     border-bottom: 2px solid #7e317b;
     padding-bottom: 10px;
@@ -86,8 +99,13 @@ body {
     color: #333333;
 }
 
-.section {
-    margin-bottom: 20px;
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    border-bottom: 2px solid #7e317b;
+    padding-bottom: 5px;
+    background-color: #f4f4f4; /* Light grey background for section titles */
 }
 
 /* Footer Styles */
@@ -97,6 +115,29 @@ body {
     margin-top: 20px;
     border-top: 1px solid #ddd;
     color: #666;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse table borders */
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #dddddd; /* Light grey border for table cells */
+    padding: 8px; /* Padding inside table cells */
+    text-align: left; /* Align text to the left */
+}
+
+th {
+    background-color: #f4f4f4; /* Light grey background for header cells */
+    font-weight: bold; /* Bold text for table headers */
+}
+
+/* Alternate Row Colors */
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Light grey background for odd rows */
 }
 
 /* Print-Specific Styles */

@@ -71,6 +71,7 @@ class FileUploadsController extends Controller
               foreach($files as $file) {
                 $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('uploads/photos', $fileName);
+                
                 array_push($result, ["generated_name" => $fileName, "original_name" => $file->getClientOriginalName()]);
               }
             } 
