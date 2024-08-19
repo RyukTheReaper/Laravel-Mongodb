@@ -25,22 +25,21 @@ Author: SW
 
 class FileUploadsController extends Controller
 {
-    //
-    public function uploadMeetingMinutes(Request $request){
-        try{
-            $file = $request->file('file');
-            $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('uploads/meetings', $fileName);
+    //New upload Meeting Minutes function
+    public function uploadMeetingMinutes(Request $request)
+    {
+        try {
+            $result = [];
+            
+            if ($files = $request->file('file')) {
+                foreach ($files as $file) {
+                    $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('uploads/meetings', $fileName);
+                    array_push($result,['generated_name' => $fileName,'original_name' => $file->getClientOriginalName(),]);
+                }
+            }
     
-            //This is the save directly to the db 
-            //Another way to do it is to save to the db and return the id of the saved item
-            // File::create([ 
-            //     'original_name' => $file->getClientOriginalName(),
-            //     'generated_name' => $fileName,
-            // ]);
-
-            //Implementing it this way returns information that might be usefull not sure what the full usecase for this would be
-            //Saving to the report data
+            // Constructing the response with multiple file information
             $response = [
                 'success' => true,
                 'message' => 'File uploaded successfully',
@@ -58,10 +57,48 @@ class FileUploadsController extends Controller
                 'data' => null
             ];
         }
-
+    
         return response($response, 200);
-
     }
+    
+    // public function uploadMeetingMinutes(Request $request){
+    //     try{
+
+    //         $file = $request->file('file');
+    //         $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+    //         $file->storeAs('uploads/meetings', $fileName);
+    
+    //         //This is the save directly to the db 
+    //         //Another way to do it is to save to the db and return the id of the saved item
+    //         // File::create([ 
+    //         //     'original_name' => $file->getClientOriginalName(),
+    //         //     'generated_name' => $fileName,
+    //         // ]);
+
+    //         //Implementing it this way returns information that might be usefull not sure what the full usecase for this would be
+    //         //Saving to the report data
+    //         $response = [
+    //             'success' => true,
+    //             'message' => 'File uploaded successfully',
+    //             'data' => [
+    //                 'original_name' => $file->getClientOriginalName(),
+    //                 'generated_name' => $fileName,
+                    
+    //             ]
+    //         ];              
+
+    //     }catch(\Exception $e){
+    //     // Exception occurred
+    //         $response = [
+    //             'success' => false,
+    //             'message' => $e->getMessage(),
+    //             'data' => null
+    //         ];
+    //     }
+
+    //     return response($response, 200);
+
+    // }
 
     public function uploadEventPhoto(Request $request){
         try {
