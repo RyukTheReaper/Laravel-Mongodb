@@ -66,22 +66,57 @@ class FileUploadsController extends Controller
 
     }
 
-    public function uploadEventPhoto(Request $request){
-        try{
+    // public function uploadEventPhoto(Request $request){
+    //     try{
 
-            $file = $request->file('file');
-            $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('uploads/photos', $fileName);
+    //         $file = $request->file('file');
+    //         $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+    //         $file->storeAs('uploads/photos', $fileName);
+
+    //         //Implementing it this way returns information that might be usefull not sure what the full usecase for this would be
+    //         //Saving to the report data
+    //         $response = [
+    //             'success' => true,
+    //             'message' => 'File uploaded successfully',
+    //             'data' => [
+    //                 'original_name' => $file->getClientOriginalName(),
+    //                 'generated_name' => $fileName,                    
+    //             ]
+    //         ];              
+
+    //     }catch(\Exception $e){
+    //     // Exception occurred
+    //         $response = [
+    //             'success' => false,
+    //             'message' => $e->getMessage(),
+    //             'data' => null
+    //         ];
+    //     }
+
+    //     return response($response, 200);
+
+    // }
+
+    //This is the code from github, commenting this out for testing purposes
+    public function uploadEventPhoto(Request $request){
+        try {
+            # return response($request, 200);
+            $result = Array();
+            if($files=$request->file('file')){
+              foreach($files as $file) {
+                $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/photos', $fileName);
+                array_push($result, ["generated_name" => $fileName, "original_name" => $file->getClientOriginalName(), ]); //Include the URL "eventPicture" => $fileUrl
+              }
+            } 
+            #$file = $request->file('file');
 
             //Implementing it this way returns information that might be usefull not sure what the full usecase for this would be
             //Saving to the report data
             $response = [
                 'success' => true,
                 'message' => 'File uploaded successfully',
-                'data' => [
-                    'original_name' => $file->getClientOriginalName(),
-                    'generated_name' => $fileName,                    
-                ]
+                'data' => $result
             ];              
 
         }catch(\Exception $e){
@@ -94,7 +129,6 @@ class FileUploadsController extends Controller
         }
 
         return response($response, 200);
-
     }
 
 

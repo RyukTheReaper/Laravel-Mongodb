@@ -7,6 +7,7 @@ use App\Models\Staff;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
 /*
 This is the Staff Controller responsible for doing 5 functions. 
 
@@ -258,6 +259,7 @@ class StaffController extends Controller
     }
 
     public function generateStaffPdf(Request $request, string $reportID){ //Look into this a little more
+        // return public_path("/photos/5d0E3Hl44oGmfbFLxAuF.png");
 
         // Fetch data from MongoDB based on report ID
         $report = Staff::find($reportID);
@@ -270,9 +272,22 @@ class StaffController extends Controller
         // Get the user based on the email from the report
         $user = User::where('email', $report->email)->first();        
 
+        // Configure Dompdf options
+        // $options = new Options();
+        // $options->set('isHtml5ParserEnabled', true);
+        // $options->set('isPhpEnabled', true); // Enable PHP if needed
+        // $options->set('isRemoteEnabled', true); // Allow loading remote resources
+
+        // $dompdf = new Dompdf($options);
+
+        // Load view and generate PDF
+        // $pdfContent = view('staffReport', ['report' => $report, 'user' => $user])->render();
+        // $dompdf->loadHtml($pdfContent);
+        // $dompdf->setPaper('A4', 'portrait');
+        // $dompdf->render();
+
         // Generate PDF using data directly
-        // $pdf = PDF::loadHTML($this->generateReportPdfHtml($report));
-        $pdf = PDF::loadView('staffReport', ['report' => $report, 'user' => $user]);
+        $pdf = PDF::loadView('staffReport', ['report' => $report, 'user' => $user, 'request' => $request]);
 
         // Return PDF as a response
         return $pdf->download('report_' . $report->id . '.pdf');

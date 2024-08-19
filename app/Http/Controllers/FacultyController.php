@@ -51,7 +51,7 @@ class FacultyController extends Controller
             'studentInternships' =>  "",
             'degreesConferred' =>  ['degreesConferredForMostRecentAcademicYear' => '', 'degreesConferredForMostRecentAcademicYearPerDepartment' => ''],
             'studentSuccess' =>  ['studentLearning' => '', 'studentClubs' => '', 'student1' => '', 'reason1' => '', 'student2' => '', 'reason2' => '', 'student3' => '', 'reason3' => ''],
-            'activities' =>  Array(['eventId' => 0, 'eventName' => '', 'personsInPicture' => '', 'eventPicture' => Array(['url' => '', 'name' => '']), 'eventSummary' => '', 'eventMonth' => '']),
+            'activities' => Array(['eventId' =>  0, 'eventName' => '', 'personsInPicture' => '', 'pictureURL' => Array(['eventPicture' => '']), 'eventSummary' => '', 'eventMonth' => '']),
             'administrativeData' =>  ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
             'financialBudget' =>  ['fundingSources' => '', 'impactfulChanges' => ''],
             'meetings'=>  Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate', 'meetingMinutesURL' => '']),
