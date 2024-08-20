@@ -257,18 +257,28 @@
             @endif
         </section>
 
+        <!--made a change to how the blades handle meetings -->
         <section class="content">
             <h2>IX. Faculty Meetings</h2>
             @if(isset($report->meetings) && count($report->meetings) > 0)
                 @foreach ($report->meetings as $meeting)
-                    @if(isset($meeting['meetingType']))
-                        <p><b>Meeting Type:</b> {{ $meeting['meetingType'] }}</p>
-                    @endif
-                    @if(isset($meeting['meetingDate']))
-                        <p><b>Meeting Date:</b> {{ $meeting['meetingDate'] }}</p>
-                    @endif
-                    @if(isset($meeting['meetingMinutesURL']))
-                        <p><b>Meeting Minutes URL:</b> <a href="{{ $meeting['meetingMinutesURL'] }}">View Minutes</a></p>
+                    <p><strong>Meeting Type:</strong> {{ $meeting['meetingType'] }}</p>
+                    <p><strong>Meeting Date:</strong> {{ $meeting['meetingDate'] }}</p>
+
+                    <!-- Handling meeting minutes URL -->
+                    @if(isset($meeting['meetingMinutesURL']) && is_array($meeting['meetingMinutesURL']))
+                        @foreach ($meeting['meetingMinutesURL'] as $minutesURL)
+                            @if(isset($minutesURL['meetingURL']) && !empty($minutesURL['meetingURL']))
+                                <!-- Display link to view or download meeting minutes -->
+                                <p><strong>Meeting Minutes URL:</strong> 
+                                    <a href="{{ $minutesURL['meetingURL'] }}">View Minutes</a>
+                                </p>
+                            @else
+                                <p>No meeting minutes available.</p>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>No meeting minutes available.</p>
                     @endif
                     <hr>
                 @endforeach

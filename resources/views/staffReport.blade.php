@@ -117,14 +117,31 @@
 
         <section class="content">
             <h2>IX. Division Meetings</h2>
-            @foreach ($report->meetings as $meeting)
-                <p><b>Meeting Type:</b> {{ $meeting['meetingType'] }}</p>
-                <p><b>Meeting Date:</b> {{ $meeting['meetingDate'] }}</p>
-                @if (!empty($meeting['meetingMinutesURL']))
-                    <p><b>Meeting Minutes:</b> <a href="{{ $meeting['meetingMinutesURL'] }}">View Minutes</a></p>
-                @endif
-                <hr>
-            @endforeach
+            @if(isset($report->meetings) && count($report->meetings) > 0)
+                @foreach ($report->meetings as $meeting)
+                    <p><strong>Meeting Type:</strong> {{ $meeting['meetingType'] }}</p>
+                    <p><strong>Meeting Date:</strong> {{ $meeting['meetingDate'] }}</p>
+
+                    <!-- Handling meeting minutes URL -->
+                    @if(isset($meeting['meetingMinutesURL']) && is_array($meeting['meetingMinutesURL']))
+                        @foreach ($meeting['meetingMinutesURL'] as $minutesURL)
+                            @if(isset($minutesURL['meetingURL']) && !empty($minutesURL['meetingURL']))
+                                <!-- Display link to view or download meeting minutes -->
+                                <p><strong>Meeting Minutes URL:</strong> 
+                                    <a href="{{ $minutesURL['meetingURL'] }}">View Minutes</a>
+                                </p>
+                            @else
+                                <p>No meeting minutes available.</p>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>No meeting minutes available.</p>
+                    @endif
+                    <hr>
+                @endforeach
+            @else
+                <p>No faculty meetings reported for this year.</p>
+            @endif
         </section>
 
         <section class="content">
