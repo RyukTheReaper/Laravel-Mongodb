@@ -69,7 +69,7 @@
                     <p><b>Accomplishment Advancement:</b> {{ $report->accomplishments['accomplishmentAdvancement'] }}</p>
                 @endif
                 @if(isset($report->accomplishments['multipleChoice']) && $report->accomplishments['multipleChoice'] != '')
-                    <p><b>Multiple Choice:</b> {{ $report->accomplishments['multipleChoice'] }}</p>
+                    <p><b>Most Impactful Change:</b> {{ $report->accomplishments['multipleChoice'] }}</p>
                 @endif
                 @if(isset($report->accomplishments['why']) && $report->accomplishments['why'] != '')
                     <p><b>Why:</b> {{ $report->accomplishments['why'] }}</p>
