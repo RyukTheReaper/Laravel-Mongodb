@@ -29,7 +29,9 @@ class FileUploadsController extends Controller
     public function uploadMeetingMinutes(Request $request)
     {
         try {
-            $result = [];
+            
+            # return response($request, 200);
+            $result = Array();
             
             if ($files = $request->file('file')) {
                 foreach ($files as $file) {
