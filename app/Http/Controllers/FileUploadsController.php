@@ -43,10 +43,7 @@ class FileUploadsController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'File uploaded successfully',
-                'data' => [
-                    'original_name' => $file->getClientOriginalName(),
-                    'generated_name' => $fileName
-                ]
+                'data' => $result
             ];              
 
         }catch(\Exception $e){
