@@ -54,6 +54,11 @@
                 @else
                     <p>No plans reported.</p>
                 @endif
+                @if(isset($report->strategicGoals['completionRate']) && $report->strategicGoals['completionRate'] != '')
+                    <p><b>Completion Rate:</b> {{ $report->strategicGoals['completionRate'] }}</p>
+                @else
+                    <p>No completion rate reported.</p>
+                @endif
             @else
                 <p>No strategic goals reported.</p>
             @endif
@@ -68,8 +73,8 @@
                 @if(isset($report->accomplishments['accomplishmentAdvancement']) && $report->accomplishments['accomplishmentAdvancement'] != '')
                     <p><b>Accomplishment Advancement:</b> {{ $report->accomplishments['accomplishmentAdvancement'] }}</p>
                 @endif
-                @if(isset($report->accomplishments['multipleChoice']) && $report->accomplishments['multipleChoice'] != '')
-                    <p><b>Most Impactful Change:</b> {{ $report->accomplishments['multipleChoice'] }}</p>
+                @if(isset($report->accomplishments['mostImpactfulChange']) && $report->accomplishments['mostImpactfulChange'] != '')
+                    <p><b>Most Impactful Change:</b> {{ $report->accomplishments['mostImpactfulChange'] }}</p>
                 @endif
                 @if(isset($report->accomplishments['why']) && $report->accomplishments['why'] != '')
                     <p><b>Why:</b> {{ $report->accomplishments['why'] }}</p>

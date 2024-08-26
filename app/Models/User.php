@@ -9,6 +9,7 @@ namespace App\Models;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use MongoDB\Laravel\Eloquent\Model; 
+use MongoDB\Laravel\Relations\HasMany;
 
 
 use LdapRecord\Laravel\Auth\LdapAuthenticatable;
@@ -18,6 +19,7 @@ use Laravel\Sanctum\HasApiTokens;
 use LdapRecord\Laravel\Auth\HasLdapUser;
 
 /* This creates a user collection in mongo db */
+
 
 
 class User extends Authenticatable implements LdapAuthenticatable
