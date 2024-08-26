@@ -17,8 +17,6 @@ use App\Http\Controllers\ReportController;
 //This will be the only unprotected route because this is used for authentication
 Route::post('authenticate', [AuthController::class, 'AuthenticateUser']);
 
-/*Return list of Reports*/
-Route::get('/allReports/{reportTypes}', [ReportController::class, 'getReports']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     // Add any route that needs to be protected inside this group
@@ -112,6 +110,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/generateFinancePdf/{reportID}', [FinanceStatistics::class, 'generateFinancePdf']);
 
     Route::get('/generateRecordsPdf/{reportID}', [RecordsStatistics::class, 'generateRecordsPdf']);
+
+    /*Return list of Reports*/
+    Route::get('/allReports/{reportTypes}', [ReportController::class, 'getReports']);
+
 
 });
 
