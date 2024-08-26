@@ -40,8 +40,8 @@ class FacultyController extends Controller
             'deadline' =>  "",
             'departmentList' => '',
             'missionStatement' =>  "",
-            'strategicGoals' =>  ['previousAcademicYear' => '', 'plans' => ''],
-            'accomplishments'=>  ['accomplishmentList' => '', 'accomplishmentAdvancement' => '', 'multipleChoice' => '', 'why' => '', 'applicableOpportunities' => ''],
+            'strategicGoals' =>  ['previousAcademicYear' => '', 'plans' => '', 'completionRate'=>''],
+            'accomplishments'=>  ['accomplishmentList' => '', 'accomplishmentAdvancement' => '', 'mostImpactfulChange' => '', 'why' => '', 'applicableOpportunities' => ''],
             'researchPartnerships' =>  ['externalFunding' => '', 'researchPublications' => '', 'partnershipAgencies' => '', 'scholarships' => ''],
             'revisedAcademics' => ['programsOffered' => '', 'newProgrammesAdded' => '', 'revisedPrograms' => ''],
             'academicPrograms' =>  "",
@@ -206,7 +206,6 @@ class FacultyController extends Controller
                 $report->faculty = $request->has('faculty') ? $data['faculty'] : $report->faculty;
                 $report->units = $request->has('units') ? $data['units'] : $report->units;
                 $report->deadline = $request->has('deadline') ? $data['deadline'] : $report->deadline;
-                $report->departmentList = $request->has('departmentList') ? $data['departmentList'] : $report->departmentList;
                 $report->missionStatement = $request->has('missionStatement') ? $data['missionStatement'] : $report->missionStatement;
                 $report->strategicGoals = $request->has('strategicGoals') ? $data['strategicGoals'] : $report->strategicGoals;
                 $report->accomplishments = $request->has('accomplishments') ? $data['accomplishments'] : $report->accomplishments;

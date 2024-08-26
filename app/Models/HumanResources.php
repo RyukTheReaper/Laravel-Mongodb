@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 //use Illuminate\Database\Eloquent\Model;
 use MongoDB\Laravel\Eloquent\Model; //Needs this inorder to use MongoDB
+use MongoDB\Laravel\Relations\BelongsTo;
+use App\Models\User;
 
 /*
 This is the HR model. Not originally part of any annual report, this 
@@ -32,4 +34,9 @@ class HumanResources extends Model
         'numberOfStaff',
         'formSubmitted'
     ];
+
+    public function user()
+    {
+        return User::where('email', $this->email)->first();
+    }
 }
