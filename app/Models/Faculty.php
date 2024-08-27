@@ -47,6 +47,7 @@ class Faculty extends Model
         'administrativeData',
         'financialBudget',
         'meetings',
+        'formSubmitted',
         'otherComments'
     ];
 

@@ -38,7 +38,8 @@ class Records extends Model
         'graduationStatistics',
         'studentOrigin',
         'campusStatistics',
-        'graduates'
+        'graduates',
+        'formSubmitted'
     ];
 
     public function user()

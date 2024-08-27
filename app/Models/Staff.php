@@ -40,6 +40,7 @@ class Staff extends Model
         'administrativeData',
         'financialBudget',
         'meetings',
+        'formSubmitted',
         'otherComments'
     ];
 

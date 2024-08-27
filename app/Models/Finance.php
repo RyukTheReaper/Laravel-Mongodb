@@ -33,6 +33,7 @@ class Finance extends Model
         'income',
         'expenditure',
         'investments',
+        'formSubmitted'
     ];
 
     public function user()

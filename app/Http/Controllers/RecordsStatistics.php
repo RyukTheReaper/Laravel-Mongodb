@@ -75,7 +75,8 @@ class RecordsStatistics extends Controller
             ),
             'studentOrigin' => ['Belize' => '', 'CentralAmericanCountries' => '', 'OtherCountries' => ''], //7.Origin of Students 
             'campusStatistics' => ['BelizeCity' => '', 'Belmopan' => '', 'PuntaGorda' => '', 'CentralFarm' => '', 'SatellitePrograms' => ''], //8.Campus Statistics
-            'graduates' => ['GraduatesByAge' => '', 'GraduatesByDistrict' => ''] //5 and 6 merged into one
+            'graduates' => ['GraduatesByAge' => '', 'GraduatesByDistrict' => ''],//5 and 6 merged into one
+            'formSubmitted' => false,
         ]);
     }
 
@@ -215,6 +216,7 @@ class RecordsStatistics extends Controller
                 $report->studentOrigin = $request->has('studentOrigin') ? $data['studentOrigin'] : $report->studentOrigin;
                 $report->campusStatistics = $request->has('campusStatistics') ? $data['campusStatistics'] : $report->campusStatistics;
                 $report->graduates = $request->has('graduates') ? $data['graduates'] : $report->graduates;
+                $report->formSubmitted = $request->has('formSubmitted') ? $data['formSubmitted'] : $report->formSubmitted;
 
                 $report->save();
                     // Format success response

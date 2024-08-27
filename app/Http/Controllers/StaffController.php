@@ -45,6 +45,7 @@ class StaffController extends Controller
             'administrativeData' => ['fullTimeStaff' => '', 'partTimeStaff' => '', 'significantStaffChanges' => ''],
             'financialBudget' => ['fundingSources' => '', 'significantBudgetChanges' => ''],
             'meetings'=> Array(['meetingId' => 0, 'meetingType' => '', 'meetingDate' => '', 'meetingMinutesURL' => Array(['meetingURL' => ''])]),
+            'formSubmitted' => false,
             'otherComments' => "",
         ]);
     }
@@ -227,6 +228,7 @@ class StaffController extends Controller
                 $report->administrativeData = $request->has('administrativeData') ? $data['administrativeData'] : $report->administrativeData;
                 $report->financialBudget = $request->has('financialBudget') ? $data['financialBudget'] : $report->financialBudget;
                 $report->meetings = $request->has('meetings') ? $data['meetings'] : $report->meetings;
+                $report->formSubmitted = $request->has('formSubmitted') ? $data['formSubmitted'] : $report->formSubmitted;
                 $report->otherComments = $request->has('otherComments') ? $data['otherComments'] : $report->otherComments;
 
                 $report->save();

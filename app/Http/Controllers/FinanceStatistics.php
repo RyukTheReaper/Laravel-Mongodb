@@ -39,7 +39,8 @@ class FinanceStatistics extends Controller
             'deadline' => "",
             'income' => ['fundingFromGoB' => '', 'tuitionFees' => '', 'contracts' => '', 'researchGrants' => '', 'endowmentAndInvestmentIncome' => '', 'other' => '', 'total' => ''],
             'expenditure' => ['teachingStaffCosts' => '', 'nonTeachingStaffCosts' => '', 'administrationCosts' => '', 'capitalExpenditures' => '', 'otherExpenditures' => ''],
-            'investments' => ['projectInvestment1' => '', 'projectInvestment2' => '', 'projectInvestment3' => '']
+            'investments' => ['projectInvestment1' => '', 'projectInvestment2' => '', 'projectInvestment3' => ''],
+            'formSubmitted' => false,
         ]);
     }
 
@@ -171,6 +172,7 @@ class FinanceStatistics extends Controller
                 $report->income = $request->has('income') ? $data['income'] : $report->income;
                 $report->expenditure = $request->has('expenditure') ? $data['expenditure'] : $report->expenditure;
                 $report->investments = $request->has('investments') ? $data['investments'] : $report->investments;
+                $report->formSubmitted = $request->has('formSubmitted') ? $data['formSubmitted'] : $report->formSubmitted;
 
                 $report->save();
                     // Format success response

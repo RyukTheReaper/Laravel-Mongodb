@@ -42,6 +42,7 @@ class HRStatistics extends Controller
                 'AdjunctFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
                 'NonTeachingStaff' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => '']
               ],
+            'formSubmitted' => false,
         ]);
     }
 
@@ -168,6 +169,7 @@ class HRStatistics extends Controller
                 $report->department = $request->has('department') ? $data['department'] : $report->department;
                 $report->deadline = $request->has('deadline') ? $data['deadline'] : $report->deadline;
                 $report->numberOfStaff = $request->has('numberOfStaff') ? $data['numberOfStaff'] : $report->numberOfStaff;
+                $report->formSubmitted = $request->has('formSubmitted') ? $data['formSubmitted'] : $report->formSubmitted;
 
                 $report->save();
                     // Format success response
