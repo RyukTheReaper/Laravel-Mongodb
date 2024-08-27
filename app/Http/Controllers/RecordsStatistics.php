@@ -73,7 +73,10 @@ class RecordsStatistics extends Controller
                 [ 'degree' => 'Science and Technology', 'Associates' => '', 'Bachelors' => '', 'Honors' => '' ],
               )]
             ),
-          'formSubmitted' => false
+            'studentOrigin' => ['Belize' => '', 'CentralAmericanCountries' => '', 'OtherCountries' => ''], //7.Origin of Students 
+            'campusStatistics' => ['BelizeCity' => '', 'Belmopan' => '', 'PuntaGorda' => '', 'CentralFarm' => '', 'SatellitePrograms' => ''], //8.Campus Statistics
+            'graduates' => ['GraduatesByAge' => '', 'GraduatesByDistrict' => ''],//5 and 6 merged into one
+            'formSubmitted' => false,
         ]);
     }
 

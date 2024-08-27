@@ -40,8 +40,13 @@ class Staff extends Model
         'administrativeData',
         'financialBudget',
         'meetings',
+<<<<<<< HEAD
         'otherComments',
         'formSubmitted'
+=======
+        'formSubmitted',
+        'otherComments'
+>>>>>>> ae3ea742905e511c14633bb540ea9869c9006e04
     ];
 
     public function user()

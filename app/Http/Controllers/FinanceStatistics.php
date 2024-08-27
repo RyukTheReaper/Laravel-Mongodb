@@ -40,7 +40,7 @@ class FinanceStatistics extends Controller
             'income' => ['fundingFromGoB' => '', 'tuitionFees' => '', 'contracts' => '', 'researchGrants' => '', 'endowmentAndInvestmentIncome' => '', 'other' => '', 'total' => ''],
             'expenditure' => ['teachingStaffCosts' => '', 'nonTeachingStaffCosts' => '', 'administrationCosts' => '', 'capitalExpenditures' => '', 'otherExpenditures' => ''],
             'investments' => ['projectInvestment1' => '', 'projectInvestment2' => '', 'projectInvestment3' => ''],
-            'formSubmitted' => false
+            'formSubmitted' => false,
         ]);
     }
 

@@ -37,12 +37,12 @@ class HRStatistics extends Controller
             'academicYearID' => "2023-2024",
             'department' => "",
             'deadline' => "",
-            'numberOfStaff' => [
-              'FulltimeFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
-              'AdjunctFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
-              'NonTeachingStaff' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => '']
-            ],
-            'formSubmitted' => false
+            'numberOfStaff' => [ //From Github
+                'FulltimeFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
+                'AdjunctFaculty' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => ''],
+                'NonTeachingStaff' => ['EducationAndArts' => '', 'ManagementAndSocialSciences' => '', 'HealthSciences' => '', 'ScienceAndTechnology' => '', 'Total' => '']
+              ],
+            'formSubmitted' => false,
         ]);
     }
 

@@ -38,7 +38,8 @@ class ReportController extends Controller
                 array_push($reportData, [
                     "reportType" => 'faculty',
                     "_id" => $faculty->_id,
-                    "name" => $faculty->user()->name
+                    "name" => $faculty->user()->name,
+                    "formSubmitted" => $faculty->formSubmitted
                 ]);
             }
 
@@ -54,7 +55,8 @@ class ReportController extends Controller
                 array_push($reportData, [
                     "reportType" => 'finance',
                     "_id" => $finance->_id,
-                    "name" => $finance->user()->name
+                    "name" => $finance->user()->name,
+                    "formSubmitted" => $finance->formSubmitted
                 ]);
             }
 
@@ -70,7 +72,8 @@ class ReportController extends Controller
                 array_push($reportData, [
                     "reportType" => 'HumanResources',
                     "_id" => $HumanResources->_id,
-                    "name" => $HumanResources->user()->name
+                    "name" => $HumanResources->user()->name,
+                    "formSubmitted" => $HumanResources->formSubmitted
                 ]);
             }
 
@@ -86,7 +89,8 @@ class ReportController extends Controller
                 array_push($reportData, [
                     "reportType" => 'records',
                     "_id" => $records->_id,
-                    "name" => $records->user()->name
+                    "name" => $records->user()->name,
+                    "formSubmitted" => $records->formSubmitted
                 ]);
             }
 
@@ -102,7 +106,8 @@ class ReportController extends Controller
                 array_push($reportData, [
                     "reportType" => 'staff',
                     "_id" => $staff->_id,
-                    "name" => $staff->user()->name
+                    "name" => $staff->user()->name,
+                    "formSubmitted" => $staff->formSubmitted
                 ]);
             }
 
