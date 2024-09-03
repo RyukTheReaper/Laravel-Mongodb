@@ -31,9 +31,9 @@
                 <b>Report By:</b> {{ $user->name }}
             </div>
             <br>
-            <div>
-                <b>Reports To:</b> {{ $report->reportsTo }}
-            </div>
+            <!-- <div> -->
+                <!-- <b>Reports To:</b> {{ $report->reportsTo }}
+            </div> -->
         </section>
 
         <section class="content">
